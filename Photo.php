@@ -18,8 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $message = "Image must be less than 2MB";
 
         } elseif (
-            $photo["type"] != "image/jpeg" &&
-            $photo["type"] != "image/png"
+            strtolower(pathinfo($photo["name"], PATHINFO_EXTENSION)) != "jpg" &&
+            strtolower(pathinfo($photo["name"], PATHINFO_EXTENSION)) != "jpeg" &&
+            strtolower(pathinfo($photo["name"], PATHINFO_EXTENSION)) != "png"
         ) {
 
             $message = "Only JPG and PNG allowed";
@@ -45,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
 
-            // حذف الصورة القديمة
             if (
                 !empty($user["profile_photo"]) &&
                 file_exists("uploads/" . $user["profile_photo"])
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 unlink("uploads/" . $user["profile_photo"]);
             }
 
-            // حفظ الصورة الجديدة
+        
             $sql = "UPDATE users SET profile_photo = ? WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("si", $photo_name, $user_id);
@@ -63,7 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // حذف الصورة
     if (isset($_POST["delete"])) {
 
         $sql = "SELECT profile_photo FROM users WHERE id = ?";
@@ -90,6 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -104,88 +105,104 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body class="bg-light">
 
-    <div class="container">
+    <div class="container py-5">
 
-        <div class="row justify-content-center">
+        <div class="card shadow border-0 mx-auto" style="max-width: 650px;">
 
-            <div class="col-md-6">
+            <div class="card-body p-5">
 
-                <div class="card shadow mt-5">
+                <div class="text-center mb-4">
 
-                    <div class="card-header text-center">
-                        <h3>Profile Photo</h3>
-                    </div>
+                    <h2 class="fw-bold mb-2">
+                        Profile Photo
+                    </h2>
 
-                    <div class="card-body text-center">
-
-                        <p class="text-muted">
-                            <?php echo $message; ?>
-                        </p>
-
-
-                        <?php
-                        $sql = "SELECT profile_photo FROM users WHERE id = ?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param("i", $user_id);
-                        $stmt->execute();
-
-                        $result = $stmt->get_result();
-                        $user = $result->fetch_assoc();
-
-                        if (!empty($user["profile_photo"])) {
-                        ?>
-
-                            <img src="uploads/<?php echo $user["profile_photo"]; ?>"
-                                 width="150"
-                                 height="150"
-                                 class="rounded-circle mb-4">
-
-                        <?php
-                        } else {
-                        ?>
-
-                            <img src="images/default.png"
-                                 width="150"
-                                 height="150"
-                                 class="rounded-circle mb-4">
-
-                        <?php
-                        }
-                        ?>
-
-
-                        <form method="post" enctype="multipart/form-data">
-
-                            <div class="mb-3">
-
-                                <input type="file"
-                                       name="profile_photo"
-                                       class="form-control">
-
-                            </div>
-
-                            <button type="submit"
-                                    name="upload"
-                                    class="btn btn-primary">
-                                Upload / Replace
-                            </button>
-
-                        </form>
-
-
-                        <form method="post" class="mt-3">
-
-                            <button type="submit"
-                                    name="delete"
-                                    class="btn btn-danger">
-                                Delete Photo
-                            </button>
-
-                        </form>
-
-                    </div>
+                    <p class="text-muted">
+                        <?php echo $message; ?>
+                    </p>
 
                 </div>
+
+
+                <div class="text-center mb-4">
+
+                    <?php 
+                    $sql = "SELECT profile_photo FROM users WHERE id = ?"; 
+                    $stmt = $conn->prepare($sql); 
+                    $stmt->bind_param("i", $user_id); 
+                    $stmt->execute(); 
+
+                    $result = $stmt->get_result(); 
+                    $user = $result->fetch_assoc(); 
+
+                    if (!empty($user["profile_photo"])) { 
+                    ?>
+
+                        <img src="uploads/<?php echo $user["profile_photo"]; ?>" 
+                             width="170"
+                             height="170"
+                             class="rounded-circle shadow"
+                             style="object-fit: cover;">
+
+                    <?php 
+                    } else { 
+                    ?>
+
+                        <img src="images/default.png" 
+                             width="170"
+                             height="170"
+                             class="rounded-circle shadow"
+                             style="object-fit: cover;">
+
+                    <?php 
+                    } 
+                    ?>
+
+                </div>
+
+
+                <div class="bg-light rounded p-4 mb-4">
+
+                    <form method="post" enctype="multipart/form-data">
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Choose a new photo
+                            </label>
+
+                            <input type="file"
+                                   name="profile_photo"
+                                   class="form-control">
+
+                        </div>
+
+                        <button type="submit"
+                                name="upload"
+                                class="btn btn-primary w-100 py-2">
+                            Upload / Replace
+                        </button>
+
+                    </form>
+
+
+                    <form method="post" class="mt-3">
+
+                        <button type="submit"
+                                name="delete"
+                                class="btn btn-danger w-100 py-2">
+                            Delete Photo
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <a href="welcome.php"
+                   class="btn btn-secondary w-100 py-2">
+                    Back 
+                </a>
 
             </div>
 

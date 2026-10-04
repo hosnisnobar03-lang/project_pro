@@ -75,6 +75,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
 ?>
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -89,61 +92,79 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
 <body class="bg-light">
 
-    <div class="container">
+    <div class="container py-5">
 
-        <div class="row justify-content-center">
+        <div class="card shadow border-0 mx-auto" style="max-width: 650px;">
 
-            <div class="col-md-5">
+            <div class="card-body p-5">
 
-                <div class="card shadow mt-5">
+                <div class="text-center mb-4">
 
-                    <div class="card-header text-center">
-                        <h3>Change Password</h3>
-                    </div>
+                    <h2 class="fw-bold mb-2">
+                        Change Password
+                    </h2>
 
-                    <div class="card-body">
-
-                        <form method="post">
-
-                            <div class="mb-3">
-                                <label class="form-label">Current Password</label>
-
-                                <input type="password"
-                                       name="current_password"
-                                       class="form-control"
-                                       placeholder="Current Password">
-                            </div>
-
-
-                            <div class="mb-3">
-                                <label class="form-label">New Password</label>
-
-                                <input type="password"
-                                       name="new_password"
-                                       class="form-control"
-                                       placeholder="New Password">
-                            </div>
-
-
-                            <div class="mb-3">
-                                <label class="form-label">Confirm New Password</label>
-
-                                <input type="password"
-                                       name="confirm_password"
-                                       class="form-control"
-                                       placeholder="Confirm New Password">
-                            </div>
-
-
-                            <button type="submit" class="btn btn-primary w-100">
-                                Change Password
-                            </button>
-
-                        </form>
-
-                    </div>
+                    <p class="text-muted">
+                        Update your account password
+                    </p>
 
                 </div>
+
+
+                <div class="bg-light rounded p-4">
+
+                    <form method="post">
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                Current Password
+                            </label>
+
+                            <input type="password"
+                                   name="current_password"
+                                   class="form-control"
+                                   placeholder="Current Password">
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                New Password
+                            </label>
+
+                            <input type="password"
+                                   name="new_password"
+                                   class="form-control"
+                                   placeholder="New Password">
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                Confirm New Password
+                            </label>
+
+                            <input type="password"
+                                   name="confirm_password"
+                                   class="form-control"
+                                   placeholder="Confirm New Password">
+                        </div>
+
+
+                        <button type="submit"
+                                class="btn btn-warning w-100 py-2">
+                            Change Password
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <a href="welcome.php"
+                   class="btn btn-secondary w-100 mt-3 py-2">
+                    Back  
+                </a>
 
             </div>
 

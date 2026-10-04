@@ -106,50 +106,97 @@ if(isset($_COOKIE["remember_user"])){
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Login</title>
 </head>
+
 <body class="bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <div class="card shadow mt-5">
-                    <div class="card-header text-center">
-                        <h3>Login</h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="" method="post">
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="Email">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                <input type="password" name="password" class="form-control" placeholder="Password">
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
-                           <div class="form-check mb-3 ">
-                                <input 
-                                    class="form-check-input" 
-                                    type="checkbox" 
-                                    name="remember" 
-                                    id="remember"
-                                    style="border: 2px solid #135183";
-                                >
-                                <label class="form-check-label" for="remember">
-                                    Remember Me
-                                </label>
-                            </div>
-                        </form>
-                    </div>
+
+    <div class="container py-5">
+
+        <div class="card shadow border-0 mx-auto" style="max-width: 650px;">
+
+            <div class="card-body p-5">
+
+                <div class="text-center mb-4">
+
+                    <h2 class="fw-bold mb-2">
+                        Login
+                    </h2>
+
+                    <p class="text-muted">
+                        Login to your account
+                    </p>
+
                 </div>
+
+
+                <div class="bg-light rounded p-4">
+
+                    <form action="" method="post">
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                Email
+                            </label>
+
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   placeholder="Email">
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                Password
+                            </label>
+
+                            <input type="password"
+                                   name="password"
+                                   class="form-control"
+                                   placeholder="Password">
+                        </div>
+
+
+                        <div class="form-check mb-4">
+
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="remember"
+                                   id="remember"
+                                   style="border: 2px solid #135183;">
+
+                            <label class="form-check-label" for="remember">
+                                Remember Me
+                            </label>
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="btn btn-primary w-100 py-2">
+                            Login
+                        </button>
+
+                    </form>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
+
 </body>
+
 </html>

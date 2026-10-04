@@ -229,8 +229,10 @@ $result = $stmt->get_result();
                                class="btn btn-sm btn-danger">
                                 Delete
                             </a>
+   
 
                         </div>
+                        
 
                 <?php
 
@@ -238,7 +240,10 @@ $result = $stmt->get_result();
                 }
 
                 ?>
-
+                
+                         <a href="welcome.php" class="btn btn-secondary w-100 mt-2">
+    Back 
+</a>
             </div>
 
         </div>

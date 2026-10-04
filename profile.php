@@ -7,7 +7,7 @@ if (!isset($_SESSION["user_id"])) {
 }
 
 if (isset($_GET["success"])) {
-    echo "Password changed successfully";
+    echo '<div class="alert alert-success text-center">Password changed successfully</div>';
 }
 
 $conn = new mysqli("localhost", "root", "", "project_pro");
@@ -23,11 +23,24 @@ $user = $result->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $full_name = $_POST["full_name"];
+    $f_name = $_POST["f_name"];
+    $s_name = $_POST["s_name"];
+    $th_name = $_POST["th_name"];
+    $l_name = $_POST["l_name"];
     $phone = $_POST["phone"];
 
-    if (!preg_match("/^[A-Za-z]+( [A-Za-z]+){3}$/", $full_name)) {
-        echo "Full name must contain 4 names";
+    $f_name = trim($_POST["f_name"]);
+    $s_name = trim($_POST["s_name"]);
+    $th_name = trim($_POST["th_name"]);
+    $l_name = trim($_POST["l_name"]);
+    $phone = $_POST["phone"];
+
+    if (!preg_match("/^[A-Za-z]+$/", $f_name) ||
+        !preg_match("/^[A-Za-z]+$/", $s_name) ||
+        !preg_match("/^[A-Za-z]+$/", $th_name) ||
+        !preg_match("/^[A-Za-z]+$/", $l_name)) {
+
+        echo "Names must contain letters only";
         exit;
     }
         if(!preg_match("/^[0-9]{14}$/" , $phone)){
@@ -35,10 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    $sql = "UPDATE users SET f_name = ?, phone = ? WHERE id = ?";
+    $sql = "UPDATE users SET f_name = ?, s_name = ?, th_name = ?, l_name = ?, phone = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssi", $full_name, $phone, $user_id);
+    $stmt->bind_param("sssssi", $f_name, $s_name, $th_name, $l_name, $phone, $user_id);
     $stmt->execute();
+    $_SESSION["user_name"] = $f_name;
 
     header("location: welcome.php")  ;
 }
@@ -47,8 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -64,105 +76,138 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body class="bg-light">
 
-    <div class="container">
+    <div class="container py-5">
 
-        <div class="row justify-content-center">
+        <div class="card shadow border-0 mx-auto" style="max-width: 650px;">
 
-            <div class="col-md-6">
+            <div class="card-body p-5">
 
-                <div class="card shadow mt-5 mb-4">
+                <div class="text-center mb-4">
 
-                    <div class="card-header text-center">
-                        <h3>My Profile</h3>
-                    </div>
+                    <h2 class="fw-bold mb-3">
+                        My Profile
+                    </h2>
 
-                    <div class="card-body">
+                    <?php if (!empty($user["profile_photo"])) { ?>
 
-                        <div class="text-center mb-4">
+                        <img src="uploads/<?php echo $user["profile_photo"]; ?>"
+                             width="150"
+                             height="150"
+                             class="rounded-circle shadow"
+                             style="object-fit: cover;">
 
-                            <?php if (!empty($user["profile_photo"])) { ?>
+                    <?php } else { ?>
 
-                                <img src="uploads/<?php echo $user["profile_photo"]; ?>"
-                                     width="150"
-                                     height="150"
-                                     class="rounded-circle">
+                        <img src="images/default.png"
+                             width="150"
+                             height="150"
+                             class="rounded-circle shadow"
+                             style="object-fit: cover;">
 
-                            <?php } else { ?>
-
-                                <img src="images/default.png"
-                                     width="150"
-                                     height="150"
-                                     class="rounded-circle">
-
-                            <?php } ?>
-
-                        </div>
-
-
-                        <div class="mb-3">
-                            <p><strong>Name:</strong>
-                                <?php echo $user["f_name"]; ?>
-                            </p>
-
-                            <p><strong>Email:</strong>
-                                <?php echo $user["email"]; ?>
-                            </p>
-
-                            <p><strong>Phone:</strong>
-                                <?php echo $user["phone"]; ?>
-                            </p>
-
-                            <p><strong>Role:</strong>
-                                <?php echo $user["role"]; ?>
-                            </p>
-                        </div>
-
-
-                        <hr>
-
-
-                        <h5 class="mb-3">Edit Profile</h5>
-
-                        <form method="post">
-
-                            <div class="mb-3">
-
-                                <label class="form-label">Full Name</label>
-
-                                <input type="text"
-                                       name="full_name"
-                                       class="form-control"
-                                       value="<?php echo $user["f_name"]; ?>">
-
-                            </div>
-
-
-                            <div class="mb-3">
-
-                                <label class="form-label">Phone</label>
-
-                                <input type="text"
-                                       name="phone"
-                                       class="form-control"
-                                       value="<?php echo $user["phone"]; ?>">
-
-                            </div>
-
-
-                            <p class="text-muted">
-                                Email: <?php echo $user["email"]; ?>
-                            </p>
-
-
-                            <button type="submit" class="btn btn-primary w-100">
-                                Save
-                            </button>
-
-                        </form>
-
-                    </div>
+                    <?php } ?>
 
                 </div>
+
+
+                <div class="bg-light rounded p-4 mb-4">
+
+                    <p class="mb-3">
+                        <strong>Name:</strong>
+                        <?php echo $user["f_name"]; ?>
+                    </p>
+
+                    <p class="mb-3">
+                        <strong>Email:</strong>
+                        <?php echo $user["email"]; ?>
+                    </p>
+
+                    <p class="mb-3">
+                        <strong>Phone:</strong>
+                        <?php echo $user["phone"]; ?>
+                    </p>
+
+                    <p class="mb-0">
+                        <strong>Role:</strong>
+                        <?php echo $user["role"]; ?>
+                    </p>
+
+                </div>
+
+
+                <hr class="mb-4">
+
+
+                <h5 class="fw-bold mb-3">
+                    Edit Profile
+                </h5>
+
+                <form method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label">First Name</label>
+
+                        <input type="text"
+                               name="f_name"
+                               class="form-control"
+                               value="<?php echo $user["f_name"]; ?>">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">Second Name</label>
+
+                        <input type="text"
+                               name="s_name"
+                               class="form-control"
+                               value="<?php echo $user["s_name"]; ?>">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">Third Name</label>
+
+                        <input type="text"
+                               name="th_name"
+                               class="form-control"
+                               value="<?php echo $user["th_name"]; ?>">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+
+                        <input type="text"
+                               name="l_name"
+                               class="form-control"
+                               value="<?php echo $user["l_name"]; ?>">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+
+                        <input type="text"
+                               name="phone"
+                               class="form-control"
+                               value="<?php echo $user["phone"]; ?>">
+                    </div>
+
+
+                    <p class="text-muted mb-4">
+                        Email: <?php echo $user["email"]; ?>
+                    </p>
+
+
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        Save Changes
+                    </button>
+
+                    <a href="welcome.php"
+                       class="btn btn-secondary w-100 mt-2 py-2">
+                        Back to Welcome
+                    </a>
+
+                </form>
 
             </div>
 
