@@ -80,6 +80,8 @@ if($_SERVER ["REQUEST_METHOD"]=="POST"){
     );
     if($stmt->execute()){
         // echo "Account created successfully";
+        header("location:login.php");
+        exit;
     }
     
 }
